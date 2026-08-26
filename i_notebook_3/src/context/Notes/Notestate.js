@@ -19,7 +19,6 @@ const NoteState = (props) => {
         })
         const json = await result.json();
         // getting notes from user(through auth token).
-        console.log(json);
         setnote(json)
     }
 
@@ -50,9 +49,7 @@ const NoteState = (props) => {
             },
         })
         const json = await result.json();
-        console.log(json)
         // finding ID of note then permanently Delete.
-        console.log("Note deleted Sucessfully having id:" + id)
         const newNote = notes.filter((note) => { return note._id !== id })
         setnote(newNote)
     }
@@ -69,7 +66,6 @@ const NoteState = (props) => {
     });
 
     const json = await result.json();
-    console.log(json);
 
     // Update note in server
     setnote((previousNotes) => {

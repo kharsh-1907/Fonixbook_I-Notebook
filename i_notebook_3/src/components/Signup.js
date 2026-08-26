@@ -17,7 +17,6 @@ const Signup = (props) => {
       body: JSON.stringify({ name: cedentrials.name, email: cedentrials.email, password: cedentrials.password }),
     })
     const json = await result.json();
-    console.log(json)
     if (json.success) {
 
       // save to local-Storage & redirect .

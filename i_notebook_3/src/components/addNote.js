@@ -11,7 +11,6 @@ const AddNote = (props) => {
         e.preventDefault();
         addNote(note);
         props.ShowAlt("Note Added Sucessfully", "success");
-        console.log(note)
         Setnote({tittle:"",description:"",tag:"default"})
 
     }

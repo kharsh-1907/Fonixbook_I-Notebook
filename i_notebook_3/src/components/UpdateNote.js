@@ -21,7 +21,6 @@ const Updatenote = (props) => {
         await props.ShowAlt("Note Editing", "success");
         // Close modal after update
         props.closeModal();
-        console.log(updatedNote);
     }
     const onChange = (e) => {
         Setnote({ ...updatedNote, [e.target.name]: e.target.value })

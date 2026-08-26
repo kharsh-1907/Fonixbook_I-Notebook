@@ -15,7 +15,6 @@ const Login = (props) => {
             body: JSON.stringify({ email: cedentrials.email, password: cedentrials.password }),
         })
         const json = await result.json();
-        console.log(json)
         if (json.success) {
             // save to local-Storage & redirect .
             localStorage.setItem('token', json.authtoken);
