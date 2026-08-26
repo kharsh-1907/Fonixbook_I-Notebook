@@ -7,7 +7,7 @@ const Login = (props) => {
     const navigate = useNavigate()
     const handelsubmit = async (e) => {
         e.preventDefault();
-        const result = await fetch("http://localhost:5000/api/auth/login", {
+        const result = await fetch("https://fonixbook-inotebook.onrender.com/api/auth/login", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
