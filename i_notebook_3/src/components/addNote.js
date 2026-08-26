@@ -12,11 +12,16 @@ const AddNote = (props) => {
         e.preventDefault();
         setLoading(true)
         try {
-            const success = await addNote(note);
+            const noteToAdd = { ...note, tag: note.tag.trim() === "" ? "Personal" : note.tag };
+            const success = await addNote(noteToAdd);
+
             if (success) {
                 props.ShowAlt("Note Added Sucessfully", "success");
-                Setnote({ tittle: "", description: "", tag: "default" })
+                Setnote({ tittle: "", description: "", tag: "" })
             }
+        }
+        catch (error) {
+            props.ShowAlt("Unable to add note", "danger");
         }
         finally {
             setLoading(false);

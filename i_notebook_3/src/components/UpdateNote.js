@@ -5,7 +5,7 @@ import NoteContext from '../context/Notes/Notecontext';
 const Updatenote = (props) => {
     const context = useContext(NoteContext);
     const { editNote } = context;
-    const [loading,setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     // Getting the selected note from Noteitem
     const { note } = props;
 
@@ -20,10 +20,14 @@ const Updatenote = (props) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await editNote(updatedNote);
+            const noteToUpdate = { ...updatedNote, tag: updatedNote.tag.trim() === "" ? "Personal" : updatedNote.tag };
+            await editNote(noteToUpdate);
             await props.ShowAlt("Note Editing", "success");
             // Close modal after update 
             props.closeModal();
+        }
+        catch (error) {
+            props.ShowAlt("Unable to edit note", "danger");
         }
         finally {
             setLoading(false);
