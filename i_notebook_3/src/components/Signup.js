@@ -6,26 +6,34 @@ const Signup = (props) => {
   const [cedentrials, setCedentrials] = useState({ name: "", email: "", password: "" });
   // instead of useHistory this is new updated version of react-dom.
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
 
   const handelsubmit = async (e) => {
     e.preventDefault();
-    const result = await fetch("https://fonixbook-inotebook.onrender.com/api/auth/createUser", {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name: cedentrials.name, email: cedentrials.email, password: cedentrials.password }),
-    })
-    const json = await result.json();
-    if (json.success) {
+    setLoading(true)
+    try {
+      const result = await fetch("https://fonixbook-inotebook.onrender.com/api/auth/createUser", {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name: cedentrials.name, email: cedentrials.email, password: cedentrials.password }),
+      })
+      const json = await result.json();
+      if (json.success) {
 
-      // save to local-Storage & redirect .
-      localStorage.setItem('token', json.authtoken);
-      props.ShowAlt("SignUp successfully done!!","success");
-      navigate('/');
+        // save to local-Storage & redirect .
+        localStorage.setItem('token', json.authtoken);
+        props.ShowAlt("SignUp successfully done!!", "success");
+        navigate('/');
+      }
+      else {
+        props.ShowAlt("Invalid cedentrials!!!", "danger")
+      }
     }
-    else{
-      props.ShowAlt("Invalid cedentrials!!!","danger")
+    finally {
+      setLoading(false);
     }
   }
 
@@ -36,7 +44,7 @@ const Signup = (props) => {
 
   return (
     <>
-      <form className='container m-auto p-4 ' onSubmit={handelsubmit} style={{opacity:"95%"}}>
+      <form className='container m-auto p-4 ' onSubmit={handelsubmit} style={{ opacity: "95%" }}>
         <div className="form-group">
           <label htmlFor="name">Name</label>
           <input type="text" className="form-control" id="name" name='name' value={cedentrials.name} onChange={onChange} aria-describedby="emailHelp" minLength={3} required />
@@ -49,7 +57,13 @@ const Signup = (props) => {
           <label htmlFor="exampleInputPassword1">Password</label>
           <input type="password" className="form-control" name='password' value={cedentrials.password} onChange={onChange} id="exampleInputPassword1" minLength={6} required />
         </div>
-        <button type="submit" className="btn btn-primary">SignUp</button>
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Signing Up...
+            </>) : ("SignUp")}
+        </button>
       </form>
     </>
   )

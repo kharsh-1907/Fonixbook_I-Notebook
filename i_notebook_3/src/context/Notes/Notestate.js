@@ -31,7 +31,7 @@ const NoteState = (props) => {
                 "Content-Type": "application/json",
                 "auth-token": localStorage.getItem('token'),
             },
-            body: JSON.stringify({tittle,description,tag}),
+            body: JSON.stringify({ tittle, description, tag }),
         });
         const json = await result.json();
         setnote(prevNotes => [...prevNotes, json]);
@@ -39,7 +39,7 @@ const NoteState = (props) => {
 
 
     //Delete notes function.
-    const deleteNote = async(id) => {
+    const deleteNote = async (id) => {
         // API call.
         const result = await fetch(`${host}/api/notes/deletenote/${id}`, {
             method: 'DELETE',
@@ -48,38 +48,40 @@ const NoteState = (props) => {
                 "auth-token": localStorage.getItem('token'),
             },
         })
-        const json = await result.json();
+        if (!result.ok) {
+            throw new Error("Failed to delete note");
+        }
         // finding ID of note then permanently Delete.
         const newNote = notes.filter((note) => { return note._id !== id })
         setnote(newNote)
     }
     //Edit notes in client .
     const editNote = async ({ id, tittle, description, tag }) => {
-    // API call
-    const result = await fetch(`${host}/api/notes/updatenote/${id}`, {
-        method: 'PUT',
-        headers: {
-            "Content-Type": "application/json",
-            "auth-token": localStorage.getItem('token'),
-        },
-        body: JSON.stringify({ tittle, description, tag }),
-    });
-
-    const json = await result.json();
-
-    // Update note in server
-    setnote((previousNotes) => {
-        return previousNotes.map((note) => {
-            if (note._id === id) {
-                return {...note,tittle,description, tag};
-            }
-            return note;
+        // API call
+        const result = await fetch(`${host}/api/notes/updatenote/${id}`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "auth-token": localStorage.getItem('token'),
+            },
+            body: JSON.stringify({ tittle, description, tag }),
         });
-    });
-};
+
+        const json = await result.json();
+
+        // Update note in server
+        setnote((previousNotes) => {
+            return previousNotes.map((note) => {
+                if (note._id === id) {
+                    return { ...note, tittle, description, tag };
+                }
+                return note;
+            });
+        });
+    };
     // provides the return result where NoteState is used.
     return (
-        <NoteContext.Provider value={{ notes, addNote, deleteNote,editNote, getNotes }}>
+        <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes }}>
             {props.children}
         </NoteContext.Provider>
     )

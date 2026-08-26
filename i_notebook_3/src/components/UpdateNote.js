@@ -5,6 +5,7 @@ import NoteContext from '../context/Notes/Notecontext';
 const Updatenote = (props) => {
     const context = useContext(NoteContext);
     const { editNote } = context;
+    const [loading,setLoading] = useState(false)
     // Getting the selected note from Noteitem
     const { note } = props;
 
@@ -17,10 +18,17 @@ const Updatenote = (props) => {
 
     const handelclick = async (e) => {
         e.preventDefault();
-        await editNote(updatedNote);
-        await props.ShowAlt("Note Editing", "success");
-        // Close modal after update
-        props.closeModal();
+        setLoading(true);
+        try {
+            await editNote(updatedNote);
+            await props.ShowAlt("Note Editing", "success");
+            // Close modal after update 
+            props.closeModal();
+        }
+        finally {
+            setLoading(false);
+        }
+
     }
     const onChange = (e) => {
         Setnote({ ...updatedNote, [e.target.name]: e.target.value })
@@ -52,7 +60,13 @@ const Updatenote = (props) => {
                             </div>
                             <div className="modal-footer flex">
                                 <button type="button" className="btn btn-secondary" onClick={props.closeModal}>Close</button>
-                                <button disabled={note.tittle.length < 3 || note.description.length < 5 } type="submit" className="btn btn-primary my-3">Update</button>
+                                <button disabled={note.tittle.length < 3 || note.description.length < 5} type="submit" className="btn btn-primary my-3">
+                                    {loading ? (
+                                        <>
+                                            <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                                            Updating...
+                                        </>
+                                    ) : ("Update Note")}</button>
                             </div>
                         </form>
                     </div>
