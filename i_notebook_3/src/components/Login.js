@@ -25,7 +25,7 @@ const Login = (props) => {
                 props.ShowAlt("LoggedIn Successfully", "success")
             }
             else {
-                props.ShowAlt("Invalid cedentrials!!!", "danger")
+                props.ShowAlt(json.error, "danger");
             }
         }
         finally {

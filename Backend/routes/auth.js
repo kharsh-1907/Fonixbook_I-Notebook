@@ -79,7 +79,7 @@ router.post('/login', [
         let user = await User.findOne({ email });
         if (!user) {
             success = false
-            return res.status(400).json({success, error: "please login with correct cedentrials." });
+            return res.status(400).json({success, error: "No account found. Please create an account first."});
         };
         let compare_password = await bcrypt.compare(password, user.password);
         if (!compare_password) {
